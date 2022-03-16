@@ -189,7 +189,7 @@ function show_image(id) {
 }
 
 function reveal_clue(index) {
-    show_image(index+1); //the 1x1 pixel is a bit too hard 
+    show_image(index+3); //the 1x1 pixel is a bit too hard 
 }
 
 async function main() {

@@ -128,7 +128,7 @@ async function setup_globals() {
     emotes = emotes.filter(x => x != "PepoG"); // we use it as example
 
     // find the solution, always the same for the whole UTC day
-    window.solution_index = (movlie_number() + 1) % emotes.length;
+    window.solution_index = (movlie_number() + 2) % emotes.length;
     window.solution = emotes[solution_index];
 }
 
