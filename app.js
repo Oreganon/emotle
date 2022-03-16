@@ -175,7 +175,7 @@ function countdown() {
 }
 
 function share() {
-    let message = "Movlie.org ";
+    let message = "Emotle.PepoG.com ";
 
     let day = movlie_number();
     message += "#" + day + " " + current_guess + "/6\n";
