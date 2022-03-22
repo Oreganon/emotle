@@ -11,7 +11,7 @@ function movlie_number() {
     const now = new Date();  
     now.setUTCHours(0, 0, 0, 0);  // go by utc
 
-    let day = Math.floor(now/8.64e7) - 19058;
+    let day = Math.floor(now/8.64e7) - 19054;
     return day;
 }
 

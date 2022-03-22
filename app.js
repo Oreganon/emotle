@@ -1,6 +1,6 @@
 const TRIES = 6;
 
-
+const PATH = window.location.pathname;
 
 function create_reveal(emote, type) {
     let elem = document.createElement("div");
@@ -20,19 +20,19 @@ function check_guess() {
     check_guessed_emote(guess);
 
     // misc to be able to restore the progress
-    const stored = parseInt(localStorage.getItem("last_played")) || 0;
+    const stored = parseInt(localStorage.getItem(PATH+"last_played")) || 0;
     if (stored != movlie_number()) {
         // a new day
-        localStorage.setItem("last_played", movlie_number());
+        localStorage.setItem(PATH+"last_played", movlie_number());
         let guesses = [];
         guesses.push(guess);
-        localStorage.setItem("guesses", JSON.stringify(guesses));
+        localStorage.setItem(PATH+"guesses", JSON.stringify(guesses));
         return;
     } else {
         // add the guess to the list
-        let guesses = JSON.parse(localStorage.getItem("guesses")) || [];
+        let guesses = JSON.parse(localStorage.getItem(PATH+"guesses")) || [];
         guesses.push(guess)
-        localStorage.setItem("guesses", JSON.stringify(guesses));
+        localStorage.setItem(PATH+"guesses", JSON.stringify(guesses));
     }
 }
 
@@ -61,7 +61,7 @@ async function check_guessed_emote(guess) {
         guess_div.appendChild(a);
 
         
-        const last_won = parseInt(localStorage.getItem("last_won")) || 0;
+        const last_won = parseInt(localStorage.getItem(PATH+"last_won")) || 0;
         // only update the statistics if we didnt refresh
         // (the first time this is reached)
         if (last_won != movlie_number()) {
@@ -69,14 +69,14 @@ async function check_guessed_emote(guess) {
             // update the statistics 
             let stats = ["played", "win", "streak", "max-streak"];
             for (var stat of stats) {
-                const stored = parseInt(localStorage.getItem(stat)) || 0;
-                localStorage.setItem(stat, stored + 1);
+                const stored = parseInt(localStorage.getItem(PATH+stat)) || 0;
+                localStorage.setItem(PATH+stat, stored + 1);
             }
-            let total = parseInt(localStorage.getItem("total-" + current_guess)) || 0;
-            localStorage.setItem("total-"+current_guess, total + 1);
+            let total = parseInt(localStorage.getItem(PATH+"total-" + current_guess)) || 0;
+            localStorage.setItem(PATH+"total-"+current_guess, total + 1);
 
             // store the current day
-            localStorage.setItem("last_won", movlie_number()); 
+            localStorage.setItem(PATH+"last_won", movlie_number()); 
         }
         document.getElementById("total-graph-"+current_guess).classList.add("highlight");
         document.getElementById("stats-footer").classList.remove("hide");
@@ -101,11 +101,11 @@ async function check_guessed_emote(guess) {
 
     if (current_guess == TRIES && guess_lowercase != solution.toLowerCase()) {
         // Riperino
-        localStorage.setItem("last_lost", movlie_number()); 
-        let stored = parseInt(localStorage.getItem("played")) || 0;
-        localStorage.setItem("played", stored + 1);
-        stored = parseInt(localStorage.getItem("streak")) || 0;
-        localStorage.setItem("streak", 0);
+        localStorage.setItem(PATH+"last_lost", movlie_number()); 
+        let stored = parseInt(localStorage.getItem(PATH+"played")) || 0;
+        localStorage.setItem(PATH+"played", stored + 1);
+        stored = parseInt(localStorage.getItem(PATH+"streak")) || 0;
+        localStorage.setItem(PATH+"streak", 0);
 
         display_solution();
     } else {
@@ -127,13 +127,13 @@ function update_statistics() {
     let stats = ["played", "streak", "max-streak"];
 
     for (var stat of stats) {
-        const stored = parseInt(localStorage.getItem(stat)) || 0;
+        const stored = parseInt(localStorage.getItem(PATH+stat)) || 0;
         let div = document.getElementById(stat);
         div.innerText = stored;
     }
 
-    let played = parseInt(localStorage.getItem("played")) || 0;
-    let win = parseInt(localStorage.getItem("win")) || 0;
+    let played = parseInt(localStorage.getItem(PATH+"played")) || 0;
+    let win = parseInt(localStorage.getItem(PATH+"win")) || 0;
     let div = document.getElementById("win");
     if (played == 0) {
         div.innerText = 0;
@@ -142,7 +142,7 @@ function update_statistics() {
     }
 
     for (var i = 0; i < TRIES ; ++i) {
-        let total = parseInt(localStorage.getItem("total-"+i)) || 0;
+        let total = parseInt(localStorage.getItem(PATH+"total-"+i)) || 0;
         let percent = 7;
         if (total != 0) {
             percent = ((100 * total) / played);
@@ -175,7 +175,7 @@ function countdown() {
 }
 
 function share() {
-    let message = "Emotle.PepoG.com ";
+    let message = window.location.host + window.location.pathname + " ";
 
     let day = movlie_number();
     message += "#" + day + " " + current_guess + "/6\n";
@@ -185,11 +185,11 @@ function share() {
 
 function show_image(id) {
     let img = document.getElementById("clue" + current_guess);
-    img.src = "/emotes/" + solution + "/" + id + ".png"
+    img.src = "emotes/" + solution + "/" + id + ".png"
 }
 
 function reveal_clue(index) {
-    show_image(index+6); //the 1x1 pixel is a bit too hard 
+    show_image(index); 
 }
 
 async function main() {
@@ -219,7 +219,7 @@ async function main() {
     restore_progress();
 
     // initialize the statistics
-    let played = parseInt(localStorage.getItem("played")) || 0;
+    let played = parseInt(localStorage.getItem(PATH+"played")) || 0;
     if (played == 0) {
         let modal = document.getElementById("help_modal")
         modal.style.display = "block";
@@ -235,14 +235,15 @@ main()
 
 
 function restore_progress() {
-    const stored = parseInt(localStorage.getItem("last_played")) || 0;
+    const stored = parseInt(localStorage.getItem(PATH+"last_played")) || 0;
 
     if (stored != movlie_number()) {
         // new day, nothing to do here
         return;
     }
-    let guesses = JSON.parse(localStorage.getItem("guesses")) || [];
+    let guesses = JSON.parse(localStorage.getItem(PATH+"guesses")) || [];
     for (let g of guesses) {
+        console.log(g);
         check_guessed_emote(g);
     }
 }

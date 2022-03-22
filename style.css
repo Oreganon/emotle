@@ -2,6 +2,11 @@ body {
     font-family: sans-serif;
 }
 
+.cluespan {
+    position: relative;
+    top: -2px;
+}
+
 .example-img {
     position: relative;
     top: 5px;
@@ -303,6 +308,7 @@ button#share-button {
 
 img {
     max-width: 100%;
+    width: 28px;
 }
 
 .orig {

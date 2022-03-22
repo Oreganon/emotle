@@ -9,10 +9,10 @@ with open("emotes.json", "w") as f:
 for emote in dirs:
     orig = "emotes/"+emote+"/orig.png"
 
-    for size in range(0,12):
+    for size in range(0,6):
         out = "emotes/"+emote+"/"+str(size)+".png"
 
-        os.system("convert " + orig + " -resize " + str(size+1) + " " + out)
+        os.system("convert " + orig + " -resize " + str(((size+1)*3)+1) + " " + out)
 
     print(emote)
 
